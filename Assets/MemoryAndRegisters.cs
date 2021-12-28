@@ -51,4 +51,9 @@ public class MemoryAndRegisters : MonoBehaviour
         
 
     }
+
+    public void InitializeMemoryGUI()
+    {
+
+    }
 }
