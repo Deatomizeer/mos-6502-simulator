@@ -22,6 +22,11 @@ public class MemoryAndRegisters : MonoBehaviour
     // Flags register, with each bit corresponding to a specific flag: NV-BDIZC.
     public sbyte flags;
 
+    // Variables for handling memory panel.
+    public GameObject memoryViewContent;
+    public GameObject cellPrefab;
+
+
     void Start()
     {
         // Initialize the accumulator, X, Y, and program count registers.
@@ -48,12 +53,19 @@ public class MemoryAndRegisters : MonoBehaviour
         string flagsBinary = Convert.ToString(flags, 2);
         flagsBinary = flagsBinary.PadLeft(8, '0');   // What a nice function!
         flagsText.text = "NV-BDIZC\n" + flagsBinary;
-        
+
+        Transform memoryCellParent = memoryViewContent.GetComponent<Transform>();
+        InitializeMemoryGUI(memoryCellParent);
 
     }
 
-    public void InitializeMemoryGUI()
+    // This method populates the memory table with cells containing data to show to the user.
+    // To lower CPU usage, the parent's component is loaded once earlier and passed as an argument.
+    public void InitializeMemoryGUI(Transform memoryCellParent)
     {
-
+        for (int i = 0; i < memorySize; i++)
+        {
+            GameObject btn = Instantiate<GameObject>(cellPrefab, memoryCellParent);
+        }
     }
 }
