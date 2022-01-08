@@ -25,6 +25,8 @@ public class MemoryAndRegisters : MonoBehaviour
     // Variables for handling memory panel.
     public GameObject memoryViewContent;
     public GameObject cellPrefab;
+    public GameObject headerPrefab; // Leftmost column and top row, 
+    List<Text> memoryText = new List<Text>();
 
 
     void Start()
@@ -57,15 +59,42 @@ public class MemoryAndRegisters : MonoBehaviour
         Transform memoryCellParent = memoryViewContent.GetComponent<Transform>();
         InitializeMemoryGUI(memoryCellParent);
 
+        //SetMemoryValue(0, 42);
     }
 
     // This method populates the memory table with cells containing data to show to the user.
     // To lower CPU usage, the parent's component is loaded once earlier and passed as an argument.
     public void InitializeMemoryGUI(Transform memoryCellParent)
     {
-        for (int i = 0; i < memorySize; i++)
+        int firstAddress = 0;
+        int cellsInOneRow = 16;
+        int rowsPopulated = 0;
+        while( rowsPopulated * cellsInOneRow < memorySize )
         {
-            GameObject btn = Instantiate<GameObject>(cellPrefab, memoryCellParent);
+            // Place the memory address indicator as the leftmost item.
+            GameObject hdr = Instantiate<GameObject>(headerPrefab, memoryCellParent);
+            hdr.GetComponentInChildren<Text>().text = (firstAddress + rowsPopulated*cellsInOneRow).ToString();
+
+            // Then populate the row as normal.
+            for (int i = 0; i < cellsInOneRow && (rowsPopulated*cellsInOneRow + i < memorySize); i++)
+            {
+                GameObject btn = Instantiate<GameObject>(cellPrefab, memoryCellParent);
+                // Add text component reference for later as well as match the representation with actual data.
+                memoryText.Add(btn.GetComponentInChildren<Text>());
+                memoryText[memoryText.Count - 1].text = memory[memoryText.Count - 1].ToString();
+            }
+            rowsPopulated++;
         }
+    }
+
+    public int GetMemoryValue(int address)
+    {
+        return memory[address];
+    }
+
+    public void SetMemoryValue(int address, sbyte value)
+    {
+        memory[address] = value;
+        memoryText[address].text = value.ToString();
     }
 }
