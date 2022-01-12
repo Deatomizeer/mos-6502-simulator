@@ -15,35 +15,40 @@ public class MemoryAndRegisters : MonoBehaviour
     public Text flagsText;
 
     // Processor registers.
-    public Dictionary<string, int> register = new Dictionary<string, int>();
+    public Dictionary<string, int> register = new Dictionary<string, int> {
+        {"AC", 0}, {"X", 0}, {"Y", 0}, {"PC", 0} 
+    };
     // Random Access Memory.
     int memorySize = 100;
-    public sbyte[] memory;
+    public int[] memory;
     // Flags register, with each bit corresponding to a specific flag: NV-BDIZC.
-    public sbyte flags;
+    public int flags;
+    public Dictionary<char, int> flagToShift = new Dictionary<char, int>{
+        {'N', 7}, {'V', 6}, {'-', 5}, {'B', 4}, {'D', 3}, {'I', 2}, {'Z', 1}, {'C', 0}
+    };
+    public string flagsTextPrefix = "NV-BDIZC\n";
 
     // Variables for handling memory panel.
     public GameObject memoryViewContent;
     public GameObject cellPrefab;
-    public GameObject headerPrefab; // Leftmost column and top row, 
-    List<Text> memoryText = new List<Text>();
+    public GameObject headerPrefab;             // Leftmost column and top row.
+    List<Text> memoryText = new List<Text>();   // UI text components.
 
 
     void Start()
     {
-        // Initialize the accumulator, X, Y, and program count registers.
-        register.Add("AC", 0);
-        register.Add("X", 0);
-        register.Add("Y", 0);
-        register.Add("PC", 0);
         // Initialize the RAM (200 address spaces for now).
-        memory = new sbyte[memorySize];
-        for(int i=0; i<memorySize; i++)
+        memory = new int[memorySize];
+        for( int i=0; i<memorySize; i++ )
         {
             memory[i] = 0;
         }
-        // Initialize the flags.
+        Transform memoryCellParent = memoryViewContent.GetComponent<Transform>();
+        InitializeMemoryGUI(memoryCellParent);
+
+        // Initialize the flags and show them on the UI in binary format.
         flags = 0b00110000;
+        RefreshFlagValueUI();
 
         // Set the default text for all data.
         acText.text = "AC: " + register["AC"];
@@ -51,15 +56,10 @@ public class MemoryAndRegisters : MonoBehaviour
         yText.text = "Y: " + register["Y"];
         pcText.text = "PC: " + register["PC"];
 
-        // Convert flags to binary format, filling leading zeroes as needed.
-        string flagsBinary = Convert.ToString(flags, 2);
-        flagsBinary = flagsBinary.PadLeft(8, '0');   // What a nice function!
-        flagsText.text = "NV-BDIZC\n" + flagsBinary;
-
-        Transform memoryCellParent = memoryViewContent.GetComponent<Transform>();
-        InitializeMemoryGUI(memoryCellParent);
 
         //SetMemoryValue(0, 42);
+        //Debug.Log("Right: " + GetFlagValue('-') + ", Wrong: " + GetFlagValue('N'));
+        //SetFlagValue('N', true);
     }
 
     // This method populates the memory table with cells containing data to show to the user.
@@ -85,6 +85,39 @@ public class MemoryAndRegisters : MonoBehaviour
             }
             rowsPopulated++;
         }
+    }
+
+    public bool GetFlagValue(char flag)
+    {
+        int index = flagToShift[flag];
+        int flagValue = (flags & (1 << index)) >> index;  // Single out the flag bit, then shift it so it's either 1 or 0.
+        return flagValue == 1 ? true : false;
+    }
+
+    public void SetFlagValue(char flag, bool value)
+    {
+        int index = flagToShift[flag];
+        int switcher = 1 << index;
+        if( value )
+        {
+            // Set flag to 1.
+            flags |= switcher;
+        }
+        else
+        {
+            // Set flag to 0.
+            switcher = ~switcher;   // Binary complement, negates all bits.
+            flags &= switcher;
+        }
+        RefreshFlagValueUI();
+    }
+
+    private void RefreshFlagValueUI()
+    {
+        // Convert flags to binary format, filling leading zeroes as needed.
+        string flagsBinary = Convert.ToString(flags, 2);
+        flagsBinary = flagsBinary.PadLeft(8, '0');   // What a nice function!
+        flagsText.text = flagsTextPrefix + flagsBinary;
     }
 
     public int GetMemoryValue(int address)
