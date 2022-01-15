@@ -20,13 +20,13 @@ public class MemoryAndRegisters : MonoBehaviour
     };
     // Random Access Memory.
     int memorySize = 100;
-    public int[] memory;
+    private int[] memory;
     // Flags register, with each bit corresponding to a specific flag: NV-BDIZC.
-    public int flags;
-    public Dictionary<char, int> flagToShift = new Dictionary<char, int>{
+    private int flags;
+    private Dictionary<char, int> flagToShift = new Dictionary<char, int>{
         {'N', 7}, {'V', 6}, {'-', 5}, {'B', 4}, {'D', 3}, {'I', 2}, {'Z', 1}, {'C', 0}
     };
-    public string flagsTextPrefix = "NV-BDIZC\n";
+    private string flagsTextPrefix = "NV-BDIZC\n";
 
     // Variables for handling memory panel.
     public GameObject memoryViewContent;
@@ -125,7 +125,7 @@ public class MemoryAndRegisters : MonoBehaviour
         return memory[address];
     }
 
-    public void SetMemoryValue(int address, sbyte value)
+    public void SetMemoryValue(int address, int value)
     {
         memory[address] = value;
         memoryText[address].text = value.ToString();
