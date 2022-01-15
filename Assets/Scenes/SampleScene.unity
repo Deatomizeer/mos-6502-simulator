@@ -977,7 +977,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Assemble
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1417,8 +1417,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1434936179}
   m_HandleRect: {fileID: 1434936178}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.08310716
+  m_Value: 1
+  m_Size: 0.64
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2288,7 +2288,7 @@ GameObject:
   - component: {fileID: 751929590}
   - component: {fileID: 751929589}
   m_Layer: 5
-  m_Name: Button
+  m_Name: AssembleButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3174,7 +3174,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 234.00003}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 650}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &927360119
@@ -5468,6 +5468,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1529329129}
   - component: {fileID: 1529329131}
+  - component: {fileID: 1529329130}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5489,6 +5490,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1529329130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529329128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a946328b2dc27744cb5c8712647ab04b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  assembleButton: {fileID: 751929589}
+  userInput: {fileID: 1054397982}
 --- !u!114 &1529329131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6426,7 +6441,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enter text...
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
