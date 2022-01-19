@@ -5725,6 +5725,7 @@ GameObject:
   - component: {fileID: 1529329129}
   - component: {fileID: 1529329131}
   - component: {fileID: 1529329130}
+  - component: {fileID: 1529329132}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5759,7 +5760,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   assembleButton: {fileID: 751929589}
+  disassembleButton: {fileID: 0}
   userInput: {fileID: 1054397982}
+  simulation: {fileID: 0}
 --- !u!114 &1529329131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5780,6 +5783,20 @@ MonoBehaviour:
   memoryViewContent: {fileID: 163466999}
   cellPrefab: {fileID: 1342389132488095717, guid: 3400eb25dcf8161478c2c9e9c0543f5c, type: 3}
   headerPrefab: {fileID: 3039052508288150824, guid: 7a16856a11abd084d900fc11e3df10ed, type: 3}
+--- !u!114 &1529329132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529329128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cff0740deda14af4dbac3cb089a6636a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  memory: {fileID: 0}
+  step: 0
 --- !u!1 &1606274768
 GameObject:
   m_ObjectHideFlags: 0
@@ -6800,8 +6817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepButton: {fileID: 859284375}
   runButton: {fileID: 0}
-  codeProcesser: {fileID: 0}
-  step: 0
+  simulation: {fileID: 0}
 --- !u!4 &2021006458
 Transform:
   m_ObjectHideFlags: 0

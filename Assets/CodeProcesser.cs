@@ -7,26 +7,28 @@ using TMPro;    // Since input area uses a special UI text object class.
 
 public class CodeProcesser : MonoBehaviour
 {
-    public Button assembleButton;
-    public TMP_Text userInput;
-    public List<List<string>> processedCode = new List<List<string>>();
+    public Button assembleButton;       // Prepare the code to be executed.
+    public Button disassembleButton;    // Translate the code into its hex representation, prior assembly required.
+    public TMP_Text userInput;          // Raw text input by the user.
+
+    // A reference to the "state" object to deliver the processed code to.
+    public SimulationState simulation;
 
     // Start is called before the first frame update
     void Start()
     {
-        assembleButton.onClick.AddListener(ProcessCode);
-    }
+        simulation = this.GetComponent<SimulationState>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        assembleButton.onClick.AddListener(ProcessCode);
+        //disassembleButton.onClick.AddListener(Hexdump);
     }
     
-    // Take the user-written code and prepare it for execution and deassembly.
+    // Take the user-written code and prepare it for execution.
     public void ProcessCode()
     {
-        processedCode.Clear();
+        simulation.step = 0;
+        simulation.processedCode.Clear();
+
         List<string> codeLines = new List<string>(userInput.text.Split('\n'));
         foreach( string line in codeLines )
         {
@@ -36,8 +38,15 @@ public class CodeProcesser : MonoBehaviour
                 // Replace whitespaces with singular spaces to ensure the line splits into words correctly.
                 string modifiedLine = Regex.Replace(line, @"\s+", " ");
                 List<string> splitLine = new List<string>(modifiedLine.Split(' '));
-                processedCode.Add(splitLine);
+                simulation.processedCode.Add(splitLine);
             }
         }
+    }
+
+    // Iterate through processed code and translate assembly to machine code in hexadecimal.
+    public void Hexdump()
+    {
+        // TODO: Maybe iterate over processedCode and feed it to opcode objects, one line at a time.
+        // That would require a reference to that dictionary though.
     }
 }
