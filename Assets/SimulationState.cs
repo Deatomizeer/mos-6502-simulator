@@ -23,7 +23,8 @@ public class SimulationState : MonoBehaviour
         memory = this.GetComponent<MemoryAndRegisters>();
 
         getOperation = new Dictionary<string, GenericOperation>{
-            { "TEST", new TestOpcode(this) }
+            { "TEST", new TestOpcode(this) },
+            { "ADC", new AddWithCarry(this) }
         };
     }
 

@@ -18,9 +18,12 @@ public class MemoryAndRegisters : MonoBehaviour
     public Dictionary<string, int> register = new Dictionary<string, int> {
         {"AC", 0}, {"X", 0}, {"Y", 0}, {"PC", 0} 
     };
+    public Dictionary<string, Text> nameToRegisterUI = new Dictionary<string, Text>();
+
     // Random Access Memory.
-    int memorySize = 100;
-    private int[] memory;
+    int memorySize = 0x3FF;
+    int normalMemoryOffset = 0x200; // After zero page and the stack.
+    public int[] memory;
     // Flags register, with each bit corresponding to a specific flag: NV-BDIZC.
     private int flags;
     private Dictionary<char, int> flagToShift = new Dictionary<char, int>{
@@ -50,11 +53,15 @@ public class MemoryAndRegisters : MonoBehaviour
         flags = 0b00110000;
         RefreshFlagValueUI();
 
+        // Populate the register map.
+        nameToRegisterUI.Add("AC", acText);
+        nameToRegisterUI.Add("X", xText);
+        nameToRegisterUI.Add("Y", yText);
+        nameToRegisterUI.Add("PC", pcText);
         // Set the default text for all data.
-        acText.text = "AC: " + register["AC"];
-        xText.text = "X: " + register["X"];
-        yText.text = "Y: " + register["Y"];
-        pcText.text = "PC: " + register["PC"];
+        foreach( string reg in nameToRegisterUI.Keys ) {
+            nameToRegisterUI[reg].text = reg + ": " + register[reg];
+        }
 
 
         //SetMemoryValue(0, 42);
@@ -66,17 +73,17 @@ public class MemoryAndRegisters : MonoBehaviour
     // To lower CPU usage, the parent's component is loaded once earlier and passed as an argument.
     public void InitializeMemoryGUI(Transform memoryCellParent)
     {
-        int firstAddress = 0;
+        int firstAddress = normalMemoryOffset;
         int cellsInOneRow = 16;
         int rowsPopulated = 0;
-        while( rowsPopulated * cellsInOneRow < memorySize )
+        while( rowsPopulated * cellsInOneRow < memorySize - firstAddress )
         {
             // Place the memory address indicator as the leftmost item.
             GameObject hdr = Instantiate<GameObject>(headerPrefab, memoryCellParent);
             hdr.GetComponentInChildren<Text>().text = (firstAddress + rowsPopulated*cellsInOneRow).ToString();
 
             // Then populate the row as normal.
-            for (int i = 0; i < cellsInOneRow && (rowsPopulated*cellsInOneRow + i < memorySize); i++)
+            for (int i = 0; i < cellsInOneRow && (rowsPopulated*cellsInOneRow + i < memorySize - firstAddress); i++)
             {
                 GameObject btn = Instantiate<GameObject>(cellPrefab, memoryCellParent);
                 // Add text component reference for later as well as match the representation with actual data.
@@ -87,11 +94,11 @@ public class MemoryAndRegisters : MonoBehaviour
         }
     }
 
-    public bool GetFlagValue(char flag)
+    public int GetFlagValue(char flag)
     {
         int index = flagToShift[flag];
         int flagValue = (flags & (1 << index)) >> index;  // Single out the flag bit, then shift it so it's either 1 or 0.
-        return flagValue == 1 ? true : false;
+        return flagValue;
     }
 
     public void SetFlagValue(char flag, bool value)
@@ -129,5 +136,11 @@ public class MemoryAndRegisters : MonoBehaviour
     {
         memory[address] = value;
         memoryText[address].text = value.ToString();
+    }
+
+    public void SetRegisterValue(string reg, int value)
+    {
+        register[reg] = value;
+        nameToRegisterUI[reg].text = reg + ": " + register[reg].ToString();
     }
 }

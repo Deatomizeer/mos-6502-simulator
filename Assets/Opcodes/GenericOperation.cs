@@ -18,6 +18,8 @@ public class GenericOperation
 
     public OperandType GetOperandType(string operand)
     {
+        // U+200B is a zero-width space that the text area appends to the end sometimes.
+        operand = operand.Trim('\u200b');
         if (operand == "A")
         {
             return OperandType.Accumulator;
@@ -68,19 +70,47 @@ public class GenericOperation
         }
     }
 
-    public int OperandToInt(string operand, OperandType ot)
+    public string OperandToHexString(string operand)
     {
-        int result = 0;
-        switch(ot)
+        string result;
+
+        OperandType ot = GetOperandType(operand);
+        switch (ot)
         {
             case OperandType.Immediate:
-                string numberString = operand.TrimStart('#','$');
-                result = int.Parse(numberString, System.Globalization.NumberStyles.HexNumber);
+                result = operand.TrimStart('#', '$');
+                break;
+            case OperandType.ZeroPage:
+            case OperandType.Absolute:
+                result = operand.TrimStart('$');
+                break;
+            case OperandType.ZeroPageX:
+            case OperandType.AbsoluteX:
+                result = operand.Trim('$', ',', 'X');
+                break;
+            case OperandType.ZeroPageY:
+            case OperandType.AbsoluteY:
+                result = operand.Trim('$', ',', 'Y');
+                break;
+            case OperandType.Indirect:
+                result = operand.Trim('(', '$', ')');
+                break;
+            case OperandType.IndirectX:
+                result = operand.Trim('(', '$', ',', 'X', ')');
+                break;
+            case OperandType.IndirectY:
+                result = operand.Trim('(', '$', ',', 'Y', ')');
                 break;
             default:
-                Debug.Log("OperandToInt failed for operand " + operand + "!");
-                break;
+                Debug.Log("OperandToHexString failed for operand " + operand);
+                return "Will throw exception later, maybe";
         }
         return result;
+    }
+
+    public int OperandToInt(string operand)
+    {
+        string hexString = OperandToHexString(operand);
+        return int.Parse(hexString, System.Globalization.NumberStyles.HexNumber);
     }
 }

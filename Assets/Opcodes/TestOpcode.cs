@@ -11,21 +11,13 @@ public class TestOpcode : GenericOperation
     
     public override void Execute( List<string> codeLine )
     {
-        // U+200B is a zero-width space that the text area appends to the end sometimes.
-        string cleanOperand = codeLine[1].Trim('\u200b');
-
         //int val = int.Parse(cleanValString);
         //sim.memory.SetMemoryValue(0, val);
-        OperandType ot = GetOperandType(cleanOperand);
-        switch( ot )
-        {
-            case OperandType.Immediate:
-                int val = OperandToInt(cleanOperand, ot);
-                sim.memory.SetMemoryValue(0, val);
-                break;
-            default:
-                break;
-        }
+        OperandType ot = GetOperandType(codeLine[1]);
+
+        int val = OperandToInt(codeLine[1]);
+        sim.memory.SetMemoryValue(0, val);
+
         Debug.Log("Operand type: " + ot.ToString());
     }
 
