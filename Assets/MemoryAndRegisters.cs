@@ -16,7 +16,7 @@ public class MemoryAndRegisters : MonoBehaviour
 
     // Processor registers.
     public Dictionary<string, int> register = new Dictionary<string, int> {
-        {"AC", 0}, {"X", 0}, {"Y", 0}, {"PC", 0} 
+        {"AC", 0}, {"X", 0}, {"Y", 0}, {"PC", 0x300} 
     };
     public Dictionary<string, Text> nameToRegisterUI = new Dictionary<string, Text>();
 
@@ -60,7 +60,7 @@ public class MemoryAndRegisters : MonoBehaviour
         nameToRegisterUI.Add("PC", pcText);
         // Set the default text for all data.
         foreach( string reg in nameToRegisterUI.Keys ) {
-            nameToRegisterUI[reg].text = reg + ": " + register[reg];
+            SetRegisterValue(reg, register[reg]);
         }
 
 
@@ -141,6 +141,15 @@ public class MemoryAndRegisters : MonoBehaviour
     public void SetRegisterValue(string reg, int value)
     {
         register[reg] = value;
-        nameToRegisterUI[reg].text = reg + ": " + register[reg].ToString();
+        if (reg == "PC")
+        {
+            // The program counter register gets two bytes of memory instead of one.
+            nameToRegisterUI[reg].text = reg + $": ${register[reg]:X4}";
+        }
+        else
+        {
+            nameToRegisterUI[reg].text = reg + $": ${register[reg]:X2}";
+        }
+        
     }
 }

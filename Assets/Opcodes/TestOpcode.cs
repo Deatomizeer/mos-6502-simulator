@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class TestOpcode : GenericOperation
 {
-    public TestOpcode(SimulationState sim) : base(sim)
-    {
-        Debug.Log("test constructor");
-    }
+    public TestOpcode(SimulationState sim) : base(sim) { }
     
     public override void Execute( List<string> codeLine )
     {
