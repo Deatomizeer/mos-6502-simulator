@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Break : GenericOperation
 {
@@ -13,8 +11,7 @@ public class Break : GenericOperation
     {
         if (codeLine.Count != 1)
         {
-            Debug.LogWarning("Exception on line " + sim.step + ". Bad operand count.");
-            return;
+            throw new BadOperandCountException("Bad operand count: " + string.Join(" ", codeLine));
         }
 
         // Since the entire simulation will halt after this, we don't push the address on the stack.

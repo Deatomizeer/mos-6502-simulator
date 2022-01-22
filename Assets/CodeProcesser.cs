@@ -34,10 +34,6 @@ public class CodeProcesser : MonoBehaviour
 
         int localStep = 0;  // Keep track of where branch labels are in the code.
         int localBytes = 0x300;
-        List<OperandType> twoByteOperands = new List<OperandType>
-        {
-            OperandType.Absolute, OperandType.AbsoluteX, OperandType.AbsoluteY
-        };
 
         List<string> codeLines = new List<string>(userInput.text.Split('\n'));
         foreach( string line in codeLines )
@@ -62,31 +58,7 @@ public class CodeProcesser : MonoBehaviour
                 {
                     simulation.processedCode.Add(splitLine);
                     localStep++;
-                    // Determine how many bytes did the instruction and operand take.
-                    if (splitLine.Count == 1)
-                    {
-                        // The opcode takes one byte and takes no operand.
-                        localBytes++;
-                    }
-                    else
-                    {
-                        OperandType ot = GenericOperation.GetOperandType(splitLine[1]);
-                        // Accumulator counts as an implicit target in machine code.
-                        if (ot == OperandType.Accumulator )
-                        {
-                            localBytes++;
-                        }
-                        else if (twoByteOperands.Exists(item => item == ot))
-                        {
-                            localBytes += 3;
-                        }
-                        // Most operands are one byte long.
-                        else
-                        {
-                            localBytes += 2;
-                        }
-                    }
-                    
+                    localBytes += GenericOperation.LineSizeInBytes(splitLine);
                 }
             }
         }

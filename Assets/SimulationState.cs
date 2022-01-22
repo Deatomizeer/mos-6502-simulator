@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,7 +30,6 @@ public class SimulationState : MonoBehaviour
         memory = this.GetComponent<MemoryAndRegisters>();
 
         getOperation = new Dictionary<string, GenericOperation>{
-            { "TEST", new TestOpcode(this) },
             { "ADC", new AddWithCarry(this) },
             { "AND", new AndWithAccumulator(this) },
             { "ASL", new ArithmeticShiftLeft(this) },
@@ -42,7 +42,43 @@ public class SimulationState : MonoBehaviour
             { "BPL", new BranchOnPlus(this) },
             { "BRK", new Break(this) },
             { "BVC", new BranchOnOverflowClear(this) },
-            { "BVS", new BranchOnOverflowSet(this) }
+            { "BVS", new BranchOnOverflowSet(this) },
+            { "CLC", new ClearCarry(this) },
+            { "CLV", new ClearOverflow(this) },
+            { "CMP", new CompareAccumulator(this) },
+            { "CPX", new CompareX(this) },
+            { "CPY", new CompareY(this) },
+            { "DEC", new DecrementMemory(this) },
+            { "DEX", new DecrementX(this) },
+            { "DEY", new DecrementY(this) },
+            { "EOR", new ExclusiveOr(this) },
+            { "INC", new IncrementMemory(this) },
+            { "INX", new IncrementX(this) },
+            { "INY", new IncrementY(this) },
+            { "JMP", new JumpToLocation(this) },
+            { "JSR", new JumpToSubroutine(this) },
+            { "LDA", new LoadAccumulator(this) },
+            { "LDX", new LoadX(this) },
+            { "LDY", new LoadY(this) },
+            { "LSR", new LogicalShiftRight(this) },
+            { "NOP", new NoOperation(this) },
+            { "ORA", new OrWithAccumulator(this) },
+            { "PLA", new PullAccumulatorFromStack(this) },
+            { "PHA", new PushAccumulatorOnStack(this) },
+            { "RTS", new ReturnFromSubroutine(this) },
+            { "ROL", new RotateLeft(this) },
+            { "ROR", new RotateRight(this) },
+            { "SEC", new SetCarry(this) },
+            { "STA", new StoreAccumulator(this) },
+            { "STX", new StoreX(this) },
+            { "STY", new StoreY(this) },
+            { "SBC", new SubtractWithCarry(this) },
+            { "TAX", new TransferAToX(this) },
+            { "TAY", new TransferAToY(this) },
+            { "TSX", new TransferStackToX(this) },
+            { "TXA", new TransferXToA(this) },
+            { "TXS", new TransferXToStack(this) },
+            { "TYA", new TransferYToA(this) }
         };
     }
 
@@ -50,11 +86,27 @@ public class SimulationState : MonoBehaviour
     {
         if (step < processedCode.Count && running)
         {
-            List<string> line = processedCode[step];
-            step++;
-            bytesProcessed += line.Count;
-            getOperation[line[0]].Execute(line);
-            memory.SetRegisterValue("PC", bytesProcessed);
+            try
+            {
+                List<string> line = processedCode[step];
+                step++;
+                bytesProcessed += GenericOperation.LineSizeInBytes(line);
+                getOperation[line[0]].Execute(line);
+                memory.SetRegisterValue("PC", bytesProcessed);
+            }
+            catch( Exception ex ) when (
+                ex is BadOperandCountException ||
+                ex is BadOperandTypeException ||
+                ex is BranchOutOfBoundsException ||
+                ex is BadJumpAddressException ||
+                ex is EmptyStackException)
+            {
+                Debug.LogWarning(ex.Message);
+            }
+            /*catch( Exception ex )
+            {
+                Debug.LogWarning("An unknown error occured: " + ex.StackTrace);// + string.Join(" ", processedCode[step]));
+            }*/
         }
-    } 
+    }
 }

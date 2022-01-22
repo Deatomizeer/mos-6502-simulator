@@ -158,14 +158,14 @@ public class GenericOperation
             case OperandType.IndirectX:
                 deref = (
                     sim.memory.memory[(operandVal + sim.memory.register["X"]) & 0xFF]
-                    + sim.memory.memory[(operandVal + sim.memory.register["X"] + 1) & 0xFF] << 8
+                    + (sim.memory.memory[(operandVal + sim.memory.register["X"] + 1) & 0xFF] << 8)
                 );
                 result = sim.memory.memory[deref];
                 break;
             case OperandType.IndirectY:
                 deref = (
                     sim.memory.memory[operandVal]
-                    + sim.memory.memory[operandVal + 1] << 8
+                    + (sim.memory.memory[operandVal + 1] << 8)
                     + sim.memory.register["Y"]
                 );
                 result = sim.memory.memory[deref];
@@ -178,6 +178,41 @@ public class GenericOperation
                 break;
         }
         return result;
+
+    }
+
+    // Determine how many bytes does the instruction and operand take.
+    public static int LineSizeInBytes(List<string> line)
+    {
+        List<OperandType> twoByteOperands = new List<OperandType>
+        {
+            OperandType.Absolute, OperandType.AbsoluteX, OperandType.AbsoluteY,
+            OperandType.Indirect, OperandType.Error
+        };
+
+        if (line.Count == 1)
+        {
+            // The opcode takes one byte and takes no operand.
+            return 1;
+        }
+        else
+        {
+            OperandType ot = GetOperandType(line[1]);
+            // Accumulator counts as an implicit target in machine code.
+            if (ot == OperandType.Accumulator)
+            {
+                return 1;
+            }
+            else if (twoByteOperands.Exists(item => item == ot))
+            {
+                return 3;
+            }
+            // Most operands are one byte long.
+            else
+            {
+                return 2;
+            }
+        }
 
     }
 }

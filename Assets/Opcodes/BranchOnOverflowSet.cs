@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class BranchOnOverflowSet : GenericOperation
 {
@@ -15,20 +13,19 @@ public class BranchOnOverflowSet : GenericOperation
     {
         if (codeLine.Count != 2)
         {
-            Debug.LogWarning("Exception on line " + sim.step + ". Bad operand count.");
-            return;
+            throw new BadOperandCountException("Bad operand count: " + string.Join(" ", codeLine));
         }
         string targetLabel = codeLine[1];
         OperandType ot = GetOperandType(targetLabel);
         if (IsIllegalOperandType(ot))
         {
-            Debug.LogWarning("Exception on line " + sim.step + ". Bad operand type.");
+            throw new BadOperandTypeException("Bad addressing mode (" + ot.ToString() + "): " + string.Join(" ", codeLine));
         }
         // The branch displacement needs to be anywhere between -128 and 127 or it won't fit into one signed byte.
         int displacement = sim.branchToBytes[targetLabel] - sim.bytesProcessed;
         if (displacement < -128 || displacement > 127)
         {
-            Debug.LogWarning("Exception on line " + sim.step + ". Branch out of bounds.");
+            throw new BranchOutOfBoundsException("Branch out of bounds: " + string.Join(" ", codeLine));
         }
 
         int targetStep = sim.branchToStep[targetLabel];

@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class ArithmeticShiftLeft : GenericOperation
 {
@@ -15,14 +13,13 @@ public class ArithmeticShiftLeft : GenericOperation
     {
         if (codeLine.Count != 2)
         {
-            Debug.LogWarning("Exception on line " + sim.step + ". Bad operand count.");
-            return;
+            throw new BadOperandCountException("Bad operand count: " + string.Join(" ", codeLine));
         }
         string operand = codeLine[1];
         OperandType ot = GetOperandType(operand);
         if (IsIllegalOperandType(ot))
         {
-            Debug.LogWarning("Exception on line " + sim.step + ". Bad operand type.");
+            throw new BadOperandTypeException("Bad addressing mode (" + GetOperandType(operand).ToString() + "): " + string.Join(" ", codeLine));
         }
 
         int val = OperandToReferencedValue(operand);

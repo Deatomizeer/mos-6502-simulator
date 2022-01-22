@@ -12,17 +12,17 @@ public class MemoryAndRegisters : MonoBehaviour
     public Text xText;
     public Text yText;
     public Text pcText;
+    public Text stackText;
     public Text flagsText;
 
     // Processor registers.
     public Dictionary<string, int> register = new Dictionary<string, int> {
-        {"AC", 0}, {"X", 0}, {"Y", 0}, {"PC", 0x300} 
+        {"AC", 0}, {"X", 0}, {"Y", 0}, {"PC", 0x300}, {"SP", 0x1FF} 
     };
     public Dictionary<string, Text> nameToRegisterUI = new Dictionary<string, Text>();
 
     // Random Access Memory.
-    int memorySize = 0x3FF;
-    int normalMemoryOffset = 0x200; // After zero page and the stack.
+    int memorySize = 0x400;
     public int[] memory;
     // Flags register, with each bit corresponding to a specific flag: NV-BDIZC.
     private int flags;
@@ -58,6 +58,7 @@ public class MemoryAndRegisters : MonoBehaviour
         nameToRegisterUI.Add("X", xText);
         nameToRegisterUI.Add("Y", yText);
         nameToRegisterUI.Add("PC", pcText);
+        nameToRegisterUI.Add("SP", stackText);
         // Set the default text for all data.
         foreach( string reg in nameToRegisterUI.Keys ) {
             SetRegisterValue(reg, register[reg]);
@@ -73,22 +74,23 @@ public class MemoryAndRegisters : MonoBehaviour
     // To lower CPU usage, the parent's component is loaded once earlier and passed as an argument.
     public void InitializeMemoryGUI(Transform memoryCellParent)
     {
-        int firstAddress = normalMemoryOffset;
         int cellsInOneRow = 16;
         int rowsPopulated = 0;
-        while( rowsPopulated * cellsInOneRow < memorySize - firstAddress )
+        int cells = 0;
+        while( cells < memorySize )
         {
             // Place the memory address indicator as the leftmost item.
             GameObject hdr = Instantiate<GameObject>(headerPrefab, memoryCellParent);
-            hdr.GetComponentInChildren<Text>().text = (firstAddress + rowsPopulated*cellsInOneRow).ToString();
+            hdr.GetComponentInChildren<Text>().text = cells.ToString();
 
             // Then populate the row as normal.
-            for (int i = 0; i < cellsInOneRow && (rowsPopulated*cellsInOneRow + i < memorySize - firstAddress); i++)
+            for (int i = 0; i < cellsInOneRow && (rowsPopulated*cellsInOneRow + i < memorySize); i++)
             {
                 GameObject btn = Instantiate<GameObject>(cellPrefab, memoryCellParent);
                 // Add text component reference for later as well as match the representation with actual data.
                 memoryText.Add(btn.GetComponentInChildren<Text>());
                 memoryText[memoryText.Count - 1].text = memory[memoryText.Count - 1].ToString();
+                cells++;
             }
             rowsPopulated++;
         }
@@ -151,5 +153,32 @@ public class MemoryAndRegisters : MonoBehaviour
             nameToRegisterUI[reg].text = reg + $": ${register[reg]:X2}";
         }
         
+    }
+
+    // Push a single byte worth of data on the stack.
+    public void PushStack(int val)
+    {
+        int stackPointer = register["SP"];
+        SetMemoryValue(stackPointer, val);
+        SetRegisterValue("SP", stackPointer-1);
+        // Wrap the stack pointer around.
+        if ( stackPointer == 0xFF)
+        {
+            SetRegisterValue("SP", 0x1FF);
+        }
+    }
+
+    // Pull one byte from the stack.
+    public int PopStack()
+    {
+        int stackPointer = register["SP"];
+        // If the stack is empty, throw an exception.
+        if ( stackPointer == 0x1FF )
+        {
+            throw new EmptyStackException("Trying to pop an empty stack");
+        }
+        int val = GetMemoryValue(stackPointer+1);
+        SetRegisterValue("SP", stackPointer+1);
+        return val;
     }
 }
