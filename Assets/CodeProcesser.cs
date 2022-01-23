@@ -9,6 +9,9 @@ public class CodeProcesser : MonoBehaviour
 {
     public Button assembleButton;       // Prepare the code to be executed.
     public Button disassembleButton;    // Translate the code into its hex representation, prior assembly required.
+    public Button stepButton;
+    public Button runButton;
+    public Button resetButton;
     public TMP_Text userInput;          // Raw text input by the user.
 
     // A reference to the "state" object to deliver the processed code to.
@@ -21,15 +24,22 @@ public class CodeProcesser : MonoBehaviour
 
         assembleButton.onClick.AddListener(ProcessCode);
         disassembleButton.onClick.AddListener(Hexdump);
+        disassembleButton.interactable = false;
+        stepButton.onClick.AddListener(simulation.SimulateStep);
+        stepButton.interactable = false;
+        runButton.onClick.AddListener(simulation.RunProgram);
+        runButton.interactable = false;
+        resetButton.onClick.AddListener(simulation.ResetSimulation);
+        resetButton.interactable = false;
     }
-    
+
     // Take the user-written code and prepare it for execution.
     public void ProcessCode()
     {
         // Reset.
+        simulation.ResetSimulation();
         simulation.step = 0;
         simulation.bytesProcessed = 0x300;
-        simulation.running = true;
         simulation.processedCode.Clear();
         simulation.branchToBytes.Clear();
         simulation.branchToStep.Clear();
@@ -65,6 +75,12 @@ public class CodeProcesser : MonoBehaviour
                 }
             }
         }
+        // Make the buttons accessible/inaccessible.
+        assembleButton.interactable = false;
+        disassembleButton.interactable = true;
+        stepButton.interactable = true;
+        runButton.interactable = true;
+        resetButton.interactable = true;
     }
 
     // Iterate through processed code and translate assembly to machine code in hexadecimal.
@@ -103,5 +119,16 @@ public class CodeProcesser : MonoBehaviour
         simulation.bytesProcessed = saveBytes;
 
         Debug.Log(fullMachineCode);
+    }
+
+    // Whenever the text area is edited, force the user to assemble the program afterwards.
+    public void OnTextChangedHandler()
+    {
+        // Make the buttons accessible/inaccessible.
+        assembleButton.interactable = true;
+        disassembleButton.interactable = false;
+        stepButton.interactable = false;
+        runButton.interactable = false;
+        resetButton.interactable = false;
     }
 }

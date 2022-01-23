@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class SimulationState : MonoBehaviour
@@ -21,7 +22,7 @@ public class SimulationState : MonoBehaviour
     // Pretty much PC, but with an offset simulating its place in memory after RAM.
     public int bytesProcessed = 0x300;
     // Set to false only with the BRK opcode.
-    public bool running = true;
+    public bool running = false;
 
     // Start is called before the first frame update
     void Start()
@@ -83,6 +84,11 @@ public class SimulationState : MonoBehaviour
 
     public void SimulateStep()
     {
+        // If just started, set running to true.
+        if(step == 0 && !running)
+        {
+            running = true;
+        }
         if (step < processedCode.Count && running)
         {
             try
@@ -102,27 +108,47 @@ public class SimulationState : MonoBehaviour
             {
                 Debug.LogWarning(ex.Message);
             }
-            /*catch( Exception ex )
+            catch( KeyNotFoundException )
             {
-                Debug.LogWarning("An unknown error occured: " + ex.StackTrace);// + string.Join(" ", processedCode[step]));
-            }*/
+                Debug.LogWarning("Unknown opcode: " + processedCode[step-1][0]);
+            }
+            catch( Exception )
+            {
+                Debug.LogWarning("An error has occured: " + string.Join(" ", processedCode[step-1]));
+            }
         }
     }
 
     public void RunProgram()
     {
-        while(step < processedCode.Count && running)
-        {
-            SimulateStep();
-        }
+        //Thread th = new Thread(RunProgramThread);
+        //th.Start();
+        RunProgramThread();
     }
 
+    public void RunProgramThread()
+    {
+        if (!running)
+        {
+            running = true;
+            while (step < processedCode.Count && running)
+            {
+                Debug.Log("hmm");
+                SimulateStep();
+            }
+        }
+        else
+        {
+            running = false;
+            //Thread.CurrentThread.Join()
+        }
+    }
     // Reset the memory as well as the simulation variables to their original state.
     public void ResetSimulation()
     {
         memory.ResetMemory();
         step = 0;
         bytesProcessed = 0x300;
-        running = true;
+        running = false;
     }
 }

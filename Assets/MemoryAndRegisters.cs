@@ -81,7 +81,7 @@ public class MemoryAndRegisters : MonoBehaviour
         {
             // Place the memory address indicator as the leftmost item.
             GameObject hdr = Instantiate<GameObject>(headerPrefab, memoryCellParent);
-            hdr.GetComponentInChildren<Text>().text = cells.ToString();
+            hdr.GetComponentInChildren<Text>().text = $"{cells:X4}".Substring(0, 3);
 
             // Then populate the row as normal.
             for (int i = 0; i < cellsInOneRow && (rowsPopulated*cellsInOneRow + i < memorySize); i++)
@@ -137,7 +137,7 @@ public class MemoryAndRegisters : MonoBehaviour
     public void SetMemoryValue(int address, int value)
     {
         memory[address] = value;
-        memoryText[address].text = value.ToString();
+        memoryText[address].text = $"{value:X2}";
     }
 
     public void SetRegisterValue(string reg, int value)
