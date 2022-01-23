@@ -231,6 +231,7 @@ public class GenericOperation
         else
         // Determine the machine code for the opcode and operand.
         {
+            line[0] = line[0].ToUpper();
             OperandType ot = GetOperandType(line[1]);
             // If the operand is a raw value, the conversion is easy enough.
             if( ot != OperandType.Error )
@@ -246,7 +247,7 @@ public class GenericOperation
                 if ( line[0] == "JMP" || line[0] == "JSR" )
                 {
                     machineCode = addrModeToOpcodeByte[OperandType.Absolute];
-                    string targetString = $"{targetInt:X4}";
+                    string targetString = $"${targetInt:X4}";
                     machineCode = string.Concat(machineCode, " ", OperandToMachineCode(targetString));
                 }
                 // Branches require one byte representing the displacement. Other than that, they only have one possible hex representation.

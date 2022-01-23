@@ -114,7 +114,7 @@ public class SimulationState : MonoBehaviour
             }
             catch( KeyNotFoundException )
             {
-                errorLog.text = "Unknown opcode: " + processedCode[step-1][0];
+                errorLog.text = "Unknown opcode or label: " + processedCode[step-1];
                 running = false;
             }
             catch( Exception )

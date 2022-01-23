@@ -15,6 +15,7 @@ public class CodeProcesser : MonoBehaviour
 
     public TMP_Text userInput;          // Raw text input by the user.
     public Text errorLog;               // Output the first error you encounter at runtime.
+    public Text hexdump;                // Output the disassembled code.
 
     // A reference to the "state" object to deliver the processed code to.
     public SimulationState simulation;
@@ -129,7 +130,7 @@ public class CodeProcesser : MonoBehaviour
         // Once done or after an error, restore the original value.
         simulation.bytesProcessed = saveBytes;
 
-        Debug.Log(fullMachineCode);
+        hexdump.text = fullMachineCode;
     }
 
     // Whenever the text area is edited, force the user to assemble the program afterwards.
