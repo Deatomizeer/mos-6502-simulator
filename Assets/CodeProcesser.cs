@@ -50,7 +50,16 @@ public class CodeProcesser : MonoBehaviour
         List<string> codeLines = new List<string>(userInput.text.Split('\n'));
         foreach( string l in codeLines )
         {
-            string line = l.Trim();
+            string line = l;
+            char commentSign = ';';
+            int commentIndex = line.IndexOf(commentSign);
+            // If there is a comment on this line, ignore all text in it.
+            if (commentIndex != -1)
+            {
+                line = line.Substring(0, commentIndex);
+            }
+            line = line.Trim();
+
             // Ignore lines that contain only whitespace.
             if( !(Regex.IsMatch(line, @"^[\s*\u200b]$") || line == "") )
             {

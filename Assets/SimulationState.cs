@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class SimulationState : MonoBehaviour
@@ -107,14 +106,17 @@ public class SimulationState : MonoBehaviour
                 ex is EmptyStackException)
             {
                 Debug.LogWarning(ex.Message);
+                running = false;
             }
             catch( KeyNotFoundException )
             {
                 Debug.LogWarning("Unknown opcode: " + processedCode[step-1][0]);
+                running = false;
             }
             catch( Exception )
             {
                 Debug.LogWarning("An error has occured: " + string.Join(" ", processedCode[step-1]));
+                running = false;
             }
         }
     }
