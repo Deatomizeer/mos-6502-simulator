@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SimulationState : MonoBehaviour
 {
     // Memory reference to allow opcodes to read and modify it.
     public MemoryAndRegisters memory;
+    // Error text reference for printing logs.
+    public Text errorLog;
     // User's code, split into singular words for convenience.
     public List<List<string>> processedCode = new List<List<string>>();
     // A branch-to-address map for various purposes (replace labels with raw addresses).
@@ -27,6 +30,7 @@ public class SimulationState : MonoBehaviour
     void Start()
     {
         memory = this.GetComponent<MemoryAndRegisters>();
+        errorLog = GameObject.Find("ErrorLog").GetComponent<Text>();
 
         getOperation = new Dictionary<string, GenericOperation>{
             { "ADC", new AddWithCarry(this) },
@@ -105,17 +109,17 @@ public class SimulationState : MonoBehaviour
                 ex is BadJumpAddressException ||
                 ex is EmptyStackException)
             {
-                Debug.LogWarning(ex.Message);
+                errorLog.text = ex.Message;
                 running = false;
             }
             catch( KeyNotFoundException )
             {
-                Debug.LogWarning("Unknown opcode: " + processedCode[step-1][0]);
+                errorLog.text = "Unknown opcode: " + processedCode[step-1][0];
                 running = false;
             }
             catch( Exception )
             {
-                Debug.LogWarning("An error has occured: " + string.Join(" ", processedCode[step-1]));
+                errorLog.text = "An error has occured: " + string.Join(" ", processedCode[step-1]);
                 running = false;
             }
         }
@@ -130,12 +134,14 @@ public class SimulationState : MonoBehaviour
 
     public void RunProgramThread()
     {
-        if (!running)
+        if(step == 0)
         {
             running = true;
+        }
+        if(running)
+        {
             while (step < processedCode.Count && running)
             {
-                Debug.Log("hmm");
                 SimulateStep();
             }
         }
@@ -149,6 +155,7 @@ public class SimulationState : MonoBehaviour
     public void ResetSimulation()
     {
         memory.ResetMemory();
+        errorLog.text = "";
         step = 0;
         bytesProcessed = 0x300;
         running = false;

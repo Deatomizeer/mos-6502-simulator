@@ -9,10 +9,12 @@ public class CodeProcesser : MonoBehaviour
 {
     public Button assembleButton;       // Prepare the code to be executed.
     public Button disassembleButton;    // Translate the code into its hex representation, prior assembly required.
-    public Button stepButton;
-    public Button runButton;
-    public Button resetButton;
+    public Button stepButton;           // Execute the next line of code.
+    public Button runButton;            // Execute the entire program at once.
+    public Button resetButton;          // Restore the original simulation status.
+
     public TMP_Text userInput;          // Raw text input by the user.
+    public Text errorLog;               // Output the first error you encounter at runtime.
 
     // A reference to the "state" object to deliver the processed code to.
     public SimulationState simulation;
@@ -110,13 +112,13 @@ public class CodeProcesser : MonoBehaviour
                 ex is BadOperandTypeException
             )
             {
-                Debug.LogWarning(ex.Message);
+                errorLog.text = ex.Message;
                 simulation.bytesProcessed = saveBytes;
                 break;
             }
             catch( Exception )
             {
-                Debug.LogWarning("An unknown error occured while processing line " + string.Join(" ", line));
+                errorLog.text = "An unknown error occured while processing line " + string.Join(" ", line);
                 simulation.bytesProcessed = saveBytes;
                 break;
             }
