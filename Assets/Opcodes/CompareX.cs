@@ -7,6 +7,11 @@ public class CompareX : GenericOperation
         allowedTypes = new List<OperandType>{
             OperandType.Immediate, OperandType.ZeroPage, OperandType.Absolute,
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Immediate, "E0" },
+            { OperandType.ZeroPage, "E4" },
+            { OperandType.Absolute, "EC" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

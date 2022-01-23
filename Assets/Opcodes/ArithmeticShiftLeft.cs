@@ -7,6 +7,13 @@ public class ArithmeticShiftLeft : GenericOperation
             OperandType.Accumulator, OperandType.ZeroPage, OperandType.ZeroPageX,
             OperandType.Absolute, OperandType.AbsoluteX
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Accumulator, "0A" },
+            { OperandType.ZeroPage, "06" },
+            { OperandType.ZeroPageX, "16" },
+            { OperandType.Absolute, "0E" },
+            { OperandType.AbsoluteX, "1E" },
+        };
     }
 
     public override void Execute(List<string> codeLine)

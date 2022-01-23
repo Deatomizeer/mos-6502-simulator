@@ -8,6 +8,16 @@ public class AddWithCarry : GenericOperation
             OperandType.Absolute, OperandType.AbsoluteX, OperandType.AbsoluteY,
             OperandType.IndirectX, OperandType.IndirectY
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Immediate, "69" },
+            { OperandType.ZeroPage, "65" },
+            { OperandType.ZeroPageX, "75" },
+            { OperandType.Absolute, "6D" },
+            { OperandType.AbsoluteX, "7D" },
+            { OperandType.AbsoluteY, "79" },
+            { OperandType.IndirectX, "61" },
+            { OperandType.IndirectY, "71" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

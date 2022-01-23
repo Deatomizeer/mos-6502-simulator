@@ -8,6 +8,11 @@ public class StoreY : GenericOperation
             OperandType.ZeroPage, OperandType.ZeroPageY,
             OperandType.Absolute
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.ZeroPage, "84" },
+            { OperandType.ZeroPageY, "94" },
+            { OperandType.Absolute, "8C" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

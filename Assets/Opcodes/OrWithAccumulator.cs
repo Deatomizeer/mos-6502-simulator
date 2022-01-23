@@ -9,6 +9,16 @@ public class OrWithAccumulator : GenericOperation
             OperandType.Absolute, OperandType.AbsoluteX, OperandType.AbsoluteY,
             OperandType.IndirectX, OperandType.IndirectY
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Immediate, "09" },
+            { OperandType.ZeroPage, "05" },
+            { OperandType.ZeroPageX, "15" },
+            { OperandType.Absolute, "0D" },
+            { OperandType.AbsoluteX, "1D" },
+            { OperandType.AbsoluteY, "19" },
+            { OperandType.IndirectX, "01" },
+            { OperandType.IndirectY, "11" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

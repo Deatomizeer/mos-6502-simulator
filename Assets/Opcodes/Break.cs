@@ -5,7 +5,11 @@ public class Break : GenericOperation
     public Break(SimulationState sim) : base(sim)
     {
         allowedTypes = new List<OperandType>{ };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "00" }
+        };
     }
+
 
     public override void Execute(List<string> codeLine)
     {

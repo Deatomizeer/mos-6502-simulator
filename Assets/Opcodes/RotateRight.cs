@@ -8,6 +8,13 @@ public class RotateRight : GenericOperation
             OperandType.Accumulator, OperandType.ZeroPage, OperandType.ZeroPageX,
             OperandType.Absolute, OperandType.AbsoluteX
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Accumulator, "6A" },
+            { OperandType.ZeroPage, "66" },
+            { OperandType.ZeroPageX, "76" },
+            { OperandType.Absolute, "6E" },
+            { OperandType.AbsoluteX, "7E" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

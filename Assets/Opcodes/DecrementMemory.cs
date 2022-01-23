@@ -8,6 +8,12 @@ public class DecrementMemory : GenericOperation
             OperandType.ZeroPage, OperandType.ZeroPageX,
             OperandType.Absolute, OperandType.AbsoluteX
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.ZeroPage, "C6" },
+            { OperandType.ZeroPageX, "D6" },
+            { OperandType.Absolute, "CE" },
+            { OperandType.AbsoluteX, "DE" },
+        };
     }
 
     public override void Execute(List<string> codeLine)

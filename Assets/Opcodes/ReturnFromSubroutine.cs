@@ -6,6 +6,9 @@ public class ReturnFromSubroutine : GenericOperation
     public ReturnFromSubroutine(SimulationState sim) : base(sim)
     {
         allowedTypes = new List<OperandType>{ };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "60" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

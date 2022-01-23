@@ -5,6 +5,9 @@ public class PullAccumulatorFromStack : GenericOperation
     public PullAccumulatorFromStack(SimulationState sim) : base(sim)
     {
         allowedTypes = new List<OperandType> { };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "68" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

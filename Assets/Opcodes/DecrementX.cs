@@ -5,7 +5,11 @@ public class DecrementX : GenericOperation
     public DecrementX(SimulationState sim) : base(sim)
     {
         allowedTypes = new List<OperandType>{ };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "CA" }
+        };
     }
+
 
     public override void Execute(List<string> codeLine)
     {

@@ -5,6 +5,9 @@ public class TransferStackToX : GenericOperation
     public TransferStackToX(SimulationState sim) : base(sim)
     {
         allowedTypes = new List<OperandType> { };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "BA" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

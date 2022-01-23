@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,8 +13,8 @@ public class SimulationState : MonoBehaviour
     // Simulated address of the labels, to compare with the branch opcode and make sure the difference fits in one signed byte.
     public Dictionary<string, int> branchToBytes = new Dictionary<string, int>();
 
-    // Maybe think of a better name?
-    private Dictionary<string, GenericOperation> getOperation;
+    // An opcode-to-object map for executing code lines.
+    public Dictionary<string, GenericOperation> getOperation;
 
     // A variable similar to PC, it's declared here so that jump operations can alter it.
     public int step = 0;
@@ -91,7 +90,7 @@ public class SimulationState : MonoBehaviour
                 List<string> line = processedCode[step];
                 step++;
                 bytesProcessed += GenericOperation.LineSizeInBytes(line);
-                getOperation[line[0]].Execute(line);
+                getOperation[line[0].ToUpper()].Execute(line);
                 memory.SetRegisterValue("PC", bytesProcessed);
             }
             catch( Exception ex ) when (
@@ -108,5 +107,22 @@ public class SimulationState : MonoBehaviour
                 Debug.LogWarning("An unknown error occured: " + ex.StackTrace);// + string.Join(" ", processedCode[step]));
             }*/
         }
+    }
+
+    public void RunProgram()
+    {
+        while(step < processedCode.Count && running)
+        {
+            SimulateStep();
+        }
+    }
+
+    // Reset the memory as well as the simulation variables to their original state.
+    public void ResetSimulation()
+    {
+        memory.ResetMemory();
+        step = 0;
+        bytesProcessed = 0x300;
+        running = true;
     }
 }

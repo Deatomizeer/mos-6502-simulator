@@ -8,6 +8,13 @@ public class LoadX : GenericOperation
             OperandType.Immediate, OperandType.ZeroPage, OperandType.ZeroPageY,
             OperandType.Absolute, OperandType.AbsoluteY
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Immediate, "A2" },
+            { OperandType.ZeroPage, "A6" },
+            { OperandType.ZeroPageY, "B6" },
+            { OperandType.Absolute, "AE" },
+            { OperandType.AbsoluteY, "BE" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

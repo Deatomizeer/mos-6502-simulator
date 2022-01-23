@@ -9,6 +9,16 @@ public class LoadAccumulator: GenericOperation
             OperandType.Absolute, OperandType.AbsoluteX, OperandType.AbsoluteY,
             OperandType.IndirectX, OperandType.IndirectY
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Immediate, "A9" },
+            { OperandType.ZeroPage, "A5" },
+            { OperandType.ZeroPageX, "B5" },
+            { OperandType.Absolute, "AD" },
+            { OperandType.AbsoluteX, "BD" },
+            { OperandType.AbsoluteY, "B9" },
+            { OperandType.IndirectX, "A1" },
+            { OperandType.IndirectY, "B1" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

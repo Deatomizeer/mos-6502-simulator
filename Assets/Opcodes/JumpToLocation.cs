@@ -8,6 +8,11 @@ public class JumpToLocation : GenericOperation
         allowedTypes = new List<OperandType>{
             OperandType.Absolute, OperandType.Indirect, OperandType.Error
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Absolute, "4C" },
+            { OperandType.Indirect, "6C" },
+            { OperandType.Error, "4C" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

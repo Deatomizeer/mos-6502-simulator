@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +7,8 @@ public class CodeInterpreter : MonoBehaviour
     // TODO: create and assign buttons.
     public Button stepButton;
     public Button runButton;
+    public Button resetButton;
+    
     public SimulationState simulation;
 
     // Start is called before the first frame update
@@ -17,6 +17,8 @@ public class CodeInterpreter : MonoBehaviour
         simulation = GameObject.Find("GameManager").GetComponent<SimulationState>();
 
         stepButton.onClick.AddListener(simulation.SimulateStep);
+        runButton.onClick.AddListener(simulation.RunProgram);
+        resetButton.onClick.AddListener(simulation.ResetSimulation);
     }
 
 }

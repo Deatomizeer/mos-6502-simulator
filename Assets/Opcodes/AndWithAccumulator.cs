@@ -8,6 +8,16 @@ public class AndWithAccumulator : GenericOperation
             OperandType.Absolute, OperandType.AbsoluteX, OperandType.AbsoluteY,
             OperandType.IndirectX, OperandType.IndirectY
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Immediate, "29" },
+            { OperandType.ZeroPage, "25" },
+            { OperandType.ZeroPageX, "35" },
+            { OperandType.Absolute, "2D" },
+            { OperandType.AbsoluteX, "3D" },
+            { OperandType.AbsoluteY, "39" },
+            { OperandType.IndirectX, "21" },
+            { OperandType.IndirectY, "31" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

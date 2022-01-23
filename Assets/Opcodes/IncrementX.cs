@@ -5,6 +5,9 @@ public class IncrementX : GenericOperation
     public IncrementX(SimulationState sim) : base(sim)
     {
         allowedTypes = new List<OperandType> { };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "E8" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

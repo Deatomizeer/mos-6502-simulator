@@ -9,6 +9,16 @@ public class SubtractWithCarry : GenericOperation
             OperandType.Absolute, OperandType.AbsoluteX, OperandType.AbsoluteY,
             OperandType.IndirectX, OperandType.IndirectY
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Immediate, "E9" },
+            { OperandType.ZeroPage, "E5" },
+            { OperandType.ZeroPageX, "F5" },
+            { OperandType.Absolute, "ED" },
+            { OperandType.AbsoluteX, "FD" },
+            { OperandType.AbsoluteY, "F9" },
+            { OperandType.IndirectX, "E1" },
+            { OperandType.IndirectY, "F1" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

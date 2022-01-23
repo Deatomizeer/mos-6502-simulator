@@ -9,6 +9,15 @@ public class StoreAccumulator : GenericOperation
             OperandType.Absolute, OperandType.AbsoluteX, OperandType.AbsoluteY,
             OperandType.IndirectX, OperandType.IndirectY
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.ZeroPage, "85" },
+            { OperandType.ZeroPageX, "95" },
+            { OperandType.Absolute, "8D" },
+            { OperandType.AbsoluteX, "9D" },
+            { OperandType.AbsoluteY, "99" },
+            { OperandType.IndirectX, "81" },
+            { OperandType.IndirectY, "91" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

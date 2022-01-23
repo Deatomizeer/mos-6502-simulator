@@ -9,6 +9,16 @@ public class CompareAccumulator : GenericOperation
             OperandType.Absolute, OperandType.AbsoluteX, OperandType.AbsoluteY,
             OperandType.IndirectX, OperandType.IndirectY
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Immediate, "C9" },
+            { OperandType.ZeroPage, "C5" },
+            { OperandType.ZeroPageX, "D5" },
+            { OperandType.Absolute, "CD" },
+            { OperandType.AbsoluteX, "DD" },
+            { OperandType.AbsoluteY, "D9" },
+            { OperandType.IndirectX, "C1" },
+            { OperandType.IndirectY, "D1" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

@@ -5,6 +5,9 @@ public class NoOperation : GenericOperation
     public NoOperation(SimulationState sim) : base(sim)
     {
         allowedTypes = new List<OperandType>{ };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "EA" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

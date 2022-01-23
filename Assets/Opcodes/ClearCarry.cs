@@ -5,6 +5,9 @@ public class ClearCarry : GenericOperation
     public ClearCarry(SimulationState sim) : base(sim)
     {
         allowedTypes = new List<OperandType> { };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "18" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

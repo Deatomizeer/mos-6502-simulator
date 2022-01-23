@@ -5,6 +5,9 @@ public class TransferYToA : GenericOperation
     public TransferYToA(SimulationState sim) : base(sim)
     {
         allowedTypes = new List<OperandType> { };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "98" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

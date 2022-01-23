@@ -5,6 +5,9 @@ public class DecrementY : GenericOperation
     public DecrementY(SimulationState sim) : base(sim)
     {
         allowedTypes = new List<OperandType> { };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "88" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

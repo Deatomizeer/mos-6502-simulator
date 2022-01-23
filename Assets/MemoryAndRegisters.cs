@@ -181,4 +181,21 @@ public class MemoryAndRegisters : MonoBehaviour
         SetRegisterValue("SP", stackPointer+1);
         return val;
     }
+
+    // Reset memory, registers and flags.
+    public void ResetMemory()
+    {
+        for (int i = 0; i < memorySize; i++)
+        {
+            SetMemoryValue(i, 0);
+        }
+        foreach (string reg in new List<string>{"AC", "X", "Y"} )
+        {
+            SetRegisterValue(reg, 0);
+        }
+        SetRegisterValue("PC", 0x300);
+        SetRegisterValue("SP", 0x1FF);
+        flags = 0b00110000;
+        RefreshFlagValueUI();
+    }
 }

@@ -7,6 +7,9 @@ public class BranchOnNotEqual : GenericOperation
         allowedTypes = new List<OperandType>{
             OperandType.Error
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "D0" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

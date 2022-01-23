@@ -7,6 +7,10 @@ public class Bit : GenericOperation
         allowedTypes = new List<OperandType>{
             OperandType.ZeroPage, OperandType.Absolute
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.ZeroPage, "24" },
+            { OperandType.Absolute, "2C" },
+        };
     }
 
     public override void Execute(List<string> codeLine)

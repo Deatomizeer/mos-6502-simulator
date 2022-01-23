@@ -8,6 +8,9 @@ public class BranchOnPlus : GenericOperation
         allowedTypes = new List<OperandType>{
             OperandType.Error
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "10" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

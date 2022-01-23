@@ -5,6 +5,9 @@ public class SetCarry : GenericOperation
     public SetCarry(SimulationState sim) : base(sim)
     {
         allowedTypes = new List<OperandType> { };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Error, "38" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

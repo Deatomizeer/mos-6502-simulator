@@ -8,6 +8,10 @@ public class JumpToSubroutine : GenericOperation
         allowedTypes = new List<OperandType>{
             OperandType.Absolute, OperandType.Error
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Absolute, "20" },
+            { OperandType.Error, "20" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

@@ -8,6 +8,13 @@ public class LogicalShiftRight : GenericOperation
             OperandType.Accumulator, OperandType.ZeroPage, OperandType.ZeroPageX,
             OperandType.Absolute, OperandType.AbsoluteX
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Accumulator, "4A" },
+            { OperandType.ZeroPage, "46" },
+            { OperandType.ZeroPageX, "56" },
+            { OperandType.Absolute, "4E" },
+            { OperandType.AbsoluteX, "5E" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

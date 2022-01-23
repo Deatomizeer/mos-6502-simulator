@@ -9,6 +9,16 @@ public class ExclusiveOr : GenericOperation
             OperandType.Absolute, OperandType.AbsoluteX, OperandType.AbsoluteY,
             OperandType.IndirectX, OperandType.IndirectY
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.Immediate, "49" },
+            { OperandType.ZeroPage, "45" },
+            { OperandType.ZeroPageX, "55" },
+            { OperandType.Absolute, "4D" },
+            { OperandType.AbsoluteX, "5D" },
+            { OperandType.AbsoluteY, "59" },
+            { OperandType.IndirectX, "41" },
+            { OperandType.IndirectY, "51" }
+        };
     }
 
     public override void Execute(List<string> codeLine)

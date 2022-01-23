@@ -8,6 +8,12 @@ public class IncrementMemory : GenericOperation
             OperandType.ZeroPage, OperandType.ZeroPageX,
             OperandType.Absolute, OperandType.AbsoluteX
         };
+        addrModeToOpcodeByte = new Dictionary<OperandType, string>{
+            { OperandType.ZeroPage, "E6" },
+            { OperandType.ZeroPageX, "F6" },
+            { OperandType.Absolute, "EE" },
+            { OperandType.AbsoluteX, "FE" },
+        };
     }
 
     public override void Execute(List<string> codeLine)
