@@ -53,8 +53,8 @@ public class CodeProcesser : MonoBehaviour
         int localStep = simulation.step;  // Keep track of where branch labels are in the code.
         int localBytes = simulation.bytesProcessed;
 
-        List<string> codeLines = new List<string>(userInput.text.Split('\n'));
-        foreach( string l in codeLines )
+        List<string> codeLines = new List<string>(userInput.text.Split(Environment.NewLine.ToCharArray()));
+        foreach ( string l in codeLines )
         {
             string line = l;
             char commentSign = ';';
