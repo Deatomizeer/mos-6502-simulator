@@ -129,19 +129,12 @@ public class SimulationState : MonoBehaviour
 
     public void RunProgram()
     {
-        //Thread th = new Thread(RunProgramThread);
-        //th.Start();
-        RunProgramThread();
-    }
-
-    public void RunProgramThread()
-    {
         float time = 0f;
-        if(step == 0)
+        if (step == 0)
         {
             running = true;
         }
-        if(running)
+        if (running)
         {
             while (step < processedCode.Count && running)
             {
@@ -155,6 +148,7 @@ public class SimulationState : MonoBehaviour
             }
         }
     }
+
     // Reset the memory as well as the simulation variables to their original state.
     public void ResetSimulation()
     {

@@ -260,11 +260,6 @@ public class GenericOperation
                     machineCode = addrModeToOpcodeByte[OperandType.Error];
                     // Because of how displacement is calculated, subtract the length of the branch operation (2 bytes).
                     int displacement = sim.branchToBytes[line[1]] - sim.bytesProcessed - 2;
-                    // If it's forward displacement, further decrement it.
-                    if ( displacement > 0 )
-                    {
-                        displacement--;
-                    }
                     displacement = (displacement + 256) & 0xFF ;   // Make it fit between 0 and 255, mapping -128 to 128.
                     if( displacement < 0 || displacement > 255)
                     {
