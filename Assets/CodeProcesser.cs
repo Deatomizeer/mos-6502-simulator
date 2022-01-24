@@ -47,6 +47,9 @@ public class CodeProcesser : MonoBehaviour
         simulation.branchToBytes.Clear();
         simulation.branchToStep.Clear();
 
+        errorLog.text = "";
+        hexdump.text = "";
+
         int localStep = simulation.step;  // Keep track of where branch labels are in the code.
         int localBytes = simulation.bytesProcessed;
 

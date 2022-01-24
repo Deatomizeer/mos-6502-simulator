@@ -7095,6 +7095,7 @@ MonoBehaviour:
   step: 0
   bytesProcessed: 768
   running: 1
+  timeout: 10
 --- !u!1 &1606274768
 GameObject:
   m_ObjectHideFlags: 0

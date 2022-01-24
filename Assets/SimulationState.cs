@@ -25,6 +25,8 @@ public class SimulationState : MonoBehaviour
     public int bytesProcessed = 0x300;
     // Set to false only with the BRK opcode.
     public bool running = false;
+    // Timeout variable to prevent infinite loops.
+    public float timeout = 10f;
 
     // Start is called before the first frame update
     void Start()
@@ -134,6 +136,7 @@ public class SimulationState : MonoBehaviour
 
     public void RunProgramThread()
     {
+        float time = 0f;
         if(step == 0)
         {
             running = true;
@@ -143,12 +146,13 @@ public class SimulationState : MonoBehaviour
             while (step < processedCode.Count && running)
             {
                 SimulateStep();
+                time += Time.deltaTime;
+                if (time > timeout)
+                {
+                    running = false;
+                    errorLog.text = "Program terminated because it would have taken over " + timeout + " seconds to finish.";
+                }
             }
-        }
-        else
-        {
-            running = false;
-            //Thread.CurrentThread.Join()
         }
     }
     // Reset the memory as well as the simulation variables to their original state.
