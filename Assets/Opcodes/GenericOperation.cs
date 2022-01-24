@@ -206,6 +206,11 @@ public class GenericOperation
             {
                 return 1;
             }
+            // Branch functions have one byte operands.
+            else if (ot == OperandType.Error && line[0].StartsWith("B") && (line[0] != "BIT" && line[0] != "BRK"))
+            {
+                return 2;
+            }
             else if (twoByteOperands.Exists(item => item == ot))
             {
                 return 3;
@@ -253,7 +258,14 @@ public class GenericOperation
                 // Branches require one byte representing the displacement. Other than that, they only have one possible hex representation.
                 else if( line[0].StartsWith("B") && (line[0] != "BIT" && line[0] != "BRK") ) {
                     machineCode = addrModeToOpcodeByte[OperandType.Error];
-                    int displacement = (sim.branchToBytes[line[1]] - sim.bytesProcessed + 256) & 0xFF ;   // Make it fit between 0 and 255, mapping -128 to 128.
+                    // Because of how displacement is calculated, subtract the length of the branch operation (2 bytes).
+                    int displacement = sim.branchToBytes[line[1]] - sim.bytesProcessed - 2;
+                    // If it's forward displacement, further decrement it.
+                    if ( displacement > 0 )
+                    {
+                        displacement--;
+                    }
+                    displacement = (displacement + 256) & 0xFF ;   // Make it fit between 0 and 255, mapping -128 to 128.
                     if( displacement < 0 || displacement > 255)
                     {
                         throw new BranchOutOfBoundsException("Branch out of bounds: " + string.Join(" ", line));
