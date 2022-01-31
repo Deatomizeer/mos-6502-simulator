@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text.RegularExpressions;
@@ -9,7 +8,7 @@ public class GenericOperation
     public SimulationState sim;
     public List<OperandType> allowedTypes;  // For checking if a given opcode can be used in conjunction with a type of operand.
     // The byte representing opcode depends on the operand's addressing mode.
-    // To simplify the algorithm, implied addressing type will have a {OperandType.Error, byte} pair.
+    // To simplify the algorithm, implied addressing mode will have an {OperandType.Error, byte} pair.
     public Dictionary<OperandType, string> addrModeToOpcodeByte;
 
     public GenericOperation(SimulationState sim)

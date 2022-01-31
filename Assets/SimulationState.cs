@@ -116,7 +116,7 @@ public class SimulationState : MonoBehaviour
             }
             catch( KeyNotFoundException )
             {
-                errorLog.text = "Unknown opcode or label: " + processedCode[step-1];
+                errorLog.text = "Unknown opcode or label: " + string.Join(" ", processedCode[step-1]);
                 running = false;
             }
             catch( Exception )
